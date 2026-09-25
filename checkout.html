@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Online Store</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+    <!-- HEADER -->
+    <header class="bg-white border-b border-slate-200 py-4 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+            <a id="back-to-store-link" href="store.html" class="flex items-center gap-2">
+                <div class="w-9 h-9 bg-rose-600 rounded-xl flex items-center justify-center text-white font-bold">
+                    <i class="fas fa-store"></i>
+                </div>
+                <span id="checkout-store-name" class="text-xl font-black">ONLINE<span class="text-rose-600">STORE</span></span>
+            </a>
+            <span class="text-xs text-slate-500 font-semibold flex items-center gap-1.5">
+                <i class="fas fa-lock text-emerald-600"></i> 256-Bit Secure SSL Checkout
+            </span>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- LEFT: Customer & Shipping Details Form -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Step 1: Customer Info -->
+                <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
+                    <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                        <span class="w-6 h-6 bg-rose-600 text-white rounded-full text-xs flex items-center justify-center">1</span>
+                        Contact Information
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Full Name *</label>
+                            <input type="text" id="cust-name" placeholder="e.g. Kasun Perera" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-rose-600">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Phone / WhatsApp Number *</label>
+                            <input type="tel" id="cust-phone" placeholder="077 123 4567" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-rose-600">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Email Address *</label>
+                            <input type="email" id="cust-email" placeholder="kasun@gmail.com" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-rose-600">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Delivery Address -->
+                <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
+                    <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                        <span class="w-6 h-6 bg-rose-600 text-white rounded-full text-xs flex items-center justify-center">2</span>
+                        Delivery Address
+                    </h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Street Address *</label>
+                            <input type="text" id="cust-address" placeholder="No. 123, Galle Road" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-rose-600">
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">City / District *</label>
+                                <select id="cust-city" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-rose-600">
+                                    <option value="Colombo">Colombo</option>
+                                    <option value="Gampaha">Gampaha</option>
+                                    <option value="Kalutara">Kalutara</option>
+                                    <option value="Kandy">Kandy</option>
+                                    <option value="Galle">Galle</option>
+                                    <option value="Kurunegala">Kurunegala</option>
+                                    <option value="Other">Other District</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Postal Code (Optional)</label>
+                                <input type="text" placeholder="10100" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-rose-600">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Payment Options -->
+                <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
+                    <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                        <span class="w-6 h-6 bg-rose-600 text-white rounded-full text-xs flex items-center justify-center">3</span>
+                        Payment Method
+                    </h2>
+                    
+                    <div class="space-y-3">
+                        <label class="flex items-start gap-3 p-4 border border-slate-200 rounded-2xl cursor-pointer hover:border-rose-600 transition bg-slate-50">
+                            <input type="radio" name="payment" value="Cash on Delivery" checked class="mt-1 accent-rose-600">
+                            <div>
+                                <span class="font-extrabold text-xs text-slate-900 block">Cash on Delivery (COD)</span>
+                                <span class="text-[11px] text-slate-500">Pay cash directly to courier agent when your package arrives.</span>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start gap-3 p-4 border border-slate-200 rounded-2xl cursor-pointer hover:border-rose-600 transition bg-emerald-50/60 border-emerald-200">
+                            <input type="radio" name="payment" value="Koko 3x Installments" class="mt-1 accent-rose-600">
+                            <div>
+                                <span class="font-extrabold text-xs text-emerald-800 block flex items-center gap-1.5">
+                                    <i class="fas fa-credit-card"></i> Koko / Mintpay Pay in 3 Installments (0% Interest)
+                                </span>
+                                <span class="text-[11px] text-emerald-700">Pay 1/3 today with any Debit or Credit card.</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <button id="place-order-btn" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-extrabold py-3.5 rounded-2xl text-sm transition shadow-lg shadow-rose-600/30 mt-4 flex items-center justify-center gap-2">
+                        <i class="fas fa-check-circle"></i> Place Order Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- RIGHT: Order Summary -->
+            <div>
+                <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm sticky top-24 space-y-4">
+                    <h3 class="font-extrabold text-sm text-slate-900 uppercase tracking-wider pb-3 border-b border-slate-100">
+                        Order Summary
+                    </h3>
+
+                    <div id="checkout-items-list" class="space-y-3 max-h-60 overflow-y-auto"></div>
+
+                    <div class="pt-4 border-t border-slate-100 space-y-2 text-xs font-semibold">
+                        <div class="flex justify-between text-slate-600">
+                            <span>Subtotal:</span>
+                            <span id="checkout-subtotal" class="font-bold text-slate-900">Rs. 0</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>Islandwide Delivery:</span>
+                            <span class="text-emerald-600 font-bold">FREE</span>
+                        </div>
+                        <div class="flex justify-between text-base font-extrabold text-slate-900 pt-2 border-t border-slate-100">
+                            <span>Total Amount:</span>
+                            <span id="checkout-total" class="text-rose-600 font-black">Rs. 0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- SUCCESS MODAL -->
+    <div id="order-success-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full text-center space-y-4 shadow-2xl">
+            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-3xl mx-auto">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2 class="text-2xl font-black text-slate-900">Order Placed Successfully!</h2>
+            <p class="text-xs text-slate-600 leading-relaxed">
+                Thank you for your purchase. Your Order ID is <strong id="generated-order-id" class="text-rose-600">#ST-84920</strong>.
+            </p>
+            <a id="return-home-btn" href="store.html" class="inline-block bg-slate-900 text-white font-bold px-6 py-3 rounded-xl text-xs hover:bg-rose-600 transition">
+                Return to Store Homepage
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const shopSlug = urlParams.get('shop') || 'simplytek';
+
+            document.getElementById('back-to-store-link').href = `store.html?shop=${shopSlug}`;
+            document.getElementById('return-home-btn').href = `store.html?shop=${shopSlug}`;
+            document.getElementById('checkout-store-name').textContent = shopSlug.toUpperCase();
+
+            const cart = JSON.parse(localStorage.getItem('simply_cart')) || [];
+            const listEl = document.getElementById('checkout-items-list');
+            const subtotalEl = document.getElementById('checkout-subtotal');
+            const totalEl = document.getElementById('checkout-total');
+
+            let grandTotalLKR = 0;
+
+            if (cart.length === 0) {
+                listEl.innerHTML = '<p class="text-xs text-slate-400">Your cart is empty.</p>';
+            } else {
+                listEl.innerHTML = cart.map(item => {
+                    const itemTotal = item.priceLKR * item.qty;
+                    grandTotalLKR += itemTotal;
+                    return `
+                        <div class="flex justify-between items-center text-xs">
+                            <div class="flex items-center gap-2">
+                                <img src="${item.image}" class="w-10 h-10 object-cover rounded-lg border">
+                                <div>
+                                    <p class="font-bold text-slate-800 line-clamp-1">${item.title}</p>
+                                    <p class="text-slate-400">Qty: ${item.qty}</p>
+                                </div>
+                            </div>
+                            <span class="font-bold text-slate-900">Rs. ${itemTotal.toLocaleString()}</span>
+                        </div>
+                    `;
+                }).join('');
+
+                subtotalEl.textContent = `Rs. ${grandTotalLKR.toLocaleString()}`;
+                totalEl.textContent = `Rs. ${grandTotalLKR.toLocaleString()}`;
+            }
+
+            document.getElementById('place-order-btn')?.addEventListener('click', async () => {
+                if (cart.length === 0) {
+                    alert("Your cart is empty!");
+                    return;
+                }
+
+                const name = document.getElementById('cust-name').value || 'Customer';
+                const phone = document.getElementById('cust-phone').value || '0771234567';
+                const email = document.getElementById('cust-email').value || 'customer@gmail.com';
+                const address = document.getElementById('cust-address').value || 'Galle Road';
+                const city = document.getElementById('cust-city').value || 'Colombo';
+                const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || 'Cash on Delivery';
+
+                const orderPayload = {
+                    customerName: name,
+                    phone: phone,
+                    email: email,
+                    address: address,
+                    city: city,
+                    items: cart,
+                    totalLKR: grandTotalLKR,
+                    paymentMethod: paymentMethod
+                };
+
+                let assignedOrderId = `ST-${Math.floor(10000 + Math.random() * 90000)}`;
+
+                try {
+                    const res = await fetch(`/api/stores/${shopSlug}/orders`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(orderPayload)
+                    });
+                    const data = await res.json();
+                    if (data.order) assignedOrderId = data.order.id;
+                } catch (e) {
+                    console.warn("Offline order placement fallback...");
+                }
+
+                localStorage.removeItem('simply_cart');
+                document.getElementById('generated-order-id').textContent = `#${assignedOrderId}`;
+                document.getElementById('order-success-modal')?.classList.remove('hidden');
+            });
+        });
+    </script>
+</body>
+</html>

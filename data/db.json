@@ -1,0 +1,170 @@
+{
+  "stores": [
+    {
+      "id": "store-simplytek",
+      "slug": "simplytek",
+      "name": "SIMPLYTEK",
+      "tagline": "Premium Tech & Electronics Store",
+      "ownerEmail": "admin@simplytek.lk",
+      "password": "admin",
+      "hotline": "+94 77 123 4567",
+      "whatsappNumber": "94771234567",
+      "announcementText": "Free Islandwide Delivery on orders over Rs. 10,000 | Cash on Delivery Available",
+      "createdAt": "2026-09-24T10:00:00.000Z"
+    },
+    {
+      "id": "store-mobilehub",
+      "slug": "mobilehub",
+      "name": "MOBILE HUB",
+      "tagline": "Original Phone Accessories & Smartwatches",
+      "ownerEmail": "contact@mobilehub.lk",
+      "password": "admin",
+      "hotline": "+94 71 999 8888",
+      "whatsappNumber": "94719998888",
+      "announcementText": "100% Original Brand Warranty | Islandwide Fast Express Delivery",
+      "createdAt": "2026-09-24T10:30:00.000Z"
+    },
+    {
+      "id": "store-1790255099321",
+      "slug": "oshadaadithya",
+      "name": "oshada adithya",
+      "tagline": "Online Store",
+      "ownerEmail": "adithyaoshada7@gmail.com",
+      "password": "oashada12.34",
+      "hotline": "+94 77 123 4567",
+      "whatsappNumber": "0722968210",
+      "announcementText": "Free Islandwide Delivery Available",
+      "createdAt": "2026-09-24T13:04:59.321Z"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "storeSlug": "simplytek",
+      "title": "Anker Soundcore Life P2 Mini True Wireless Earbuds",
+      "category": "audio",
+      "brand": "Anker",
+      "priceLKR": 12900,
+      "originalPriceLKR": 16500,
+      "rating": 4.8,
+      "reviewsCount": 142,
+      "inStock": true,
+      "isFlashSale": true,
+      "flashDiscount": "22% OFF",
+      "image": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&auto=format&fit=crop&q=80",
+      "badge": "BESTSELLER",
+      "description": "Big Sound, Tiny Size: Soundcore Life P2 Mini TWS earbuds have 10mm drivers that boost quality sound with deep bass."
+    },
+    {
+      "id": 2,
+      "storeSlug": "simplytek",
+      "title": "Haylou Solar Plus RT3 Smart Watch with Bluetooth Calling",
+      "category": "smartwatches",
+      "brand": "Haylou",
+      "priceLKR": 15400,
+      "originalPriceLKR": 18900,
+      "rating": 4.7,
+      "reviewsCount": 98,
+      "inStock": true,
+      "isFlashSale": true,
+      "flashDiscount": "18% OFF",
+      "image": "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=600&auto=format&fit=crop&q=80",
+      "badge": "HOT",
+      "description": "1.43 inch AMOLED Display | Bluetooth Phone Calls | 105 Sports Modes."
+    },
+    {
+      "id": 3,
+      "storeSlug": "mobilehub",
+      "title": "Baseus GaN5 Pro 65W Fast Charger Desktop Power Strip",
+      "category": "power",
+      "brand": "Baseus",
+      "priceLKR": 14500,
+      "originalPriceLKR": 17200,
+      "rating": 4.9,
+      "reviewsCount": 76,
+      "inStock": true,
+      "isFlashSale": false,
+      "image": "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&auto=format&fit=crop&q=80",
+      "badge": "NEW",
+      "description": "65W GaN Quick Charge Wall Charger with Type-C to Type-C cable."
+    },
+    {
+      "id": 4,
+      "storeSlug": "mobilehub",
+      "title": "Anker 335 Power Bank 20000mAh 20W Fast Charge",
+      "category": "power",
+      "brand": "Anker",
+      "priceLKR": 16800,
+      "originalPriceLKR": 19900,
+      "rating": 4.9,
+      "reviewsCount": 310,
+      "inStock": true,
+      "isFlashSale": true,
+      "flashDiscount": "15% OFF",
+      "image": "https://images.unsplash.com/photo-1609592424109-dd9892f1b177?w=600&auto=format&fit=crop&q=80",
+      "badge": "TOP RATED",
+      "description": "20,000mAh capacity with 20W Power Delivery output."
+    },
+    {
+      "id": 5,
+      "storeSlug": "oshadaadithya",
+      "title": "oshada adithya osjaf",
+      "category": "audio",
+      "brand": "dfefcdfd",
+      "priceLKR": 15000,
+      "originalPriceLKR": 16500,
+      "rating": 5,
+      "reviewsCount": 1,
+      "inStock": true,
+      "isFlashSale": false,
+      "flashDiscount": null,
+      "image": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600",
+      "badge": "NEW",
+      "description": "edcdeASDsSSeC"
+    }
+  ],
+  "orders": [
+    {
+      "id": "ST-84920",
+      "storeSlug": "simplytek",
+      "date": "2026-09-24 08:15 AM",
+      "customerName": "Kasun Perera",
+      "phone": "0771234567",
+      "email": "kasun@gmail.com",
+      "address": "No. 45, Galle Road, Colombo 03",
+      "city": "Colombo",
+      "items": [
+        {
+          "id": 1,
+          "title": "Anker Soundcore Life P2 Mini",
+          "qty": 1,
+          "priceLKR": 12900
+        }
+      ],
+      "totalLKR": 12900,
+      "paymentMethod": "Cash on Delivery",
+      "status": "Pending"
+    },
+    {
+      "id": "MH-10293",
+      "storeSlug": "mobilehub",
+      "date": "2026-09-24 09:30 AM",
+      "customerName": "Dilshan Fernando",
+      "phone": "0715554433",
+      "email": "dilshan@gmail.com",
+      "address": "No. 88, Main Street, Kandy",
+      "city": "Kandy",
+      "items": [
+        {
+          "id": 4,
+          "title": "Anker 335 Power Bank 20000mAh",
+          "qty": 1,
+          "priceLKR": 16800
+        }
+      ],
+      "totalLKR": 16800,
+      "paymentMethod": "Koko 3x Installments",
+      "status": "Confirmed"
+    }
+  ]
+}

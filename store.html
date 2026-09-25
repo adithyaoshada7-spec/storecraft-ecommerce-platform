@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Store | Powered by StoreCraft</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+    <!-- 1. ANNOUNCEMENT TOP BAR -->
+    <div class="bg-slate-950 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+            <div class="flex items-center gap-4">
+                <span id="store-announcement" class="flex items-center gap-1.5 text-amber-400 font-semibold">
+                    <i class="fas fa-truck-fast"></i> Free Islandwide Delivery Available
+                </span>
+            </div>
+
+            <div class="flex items-center gap-5">
+                <div class="flex items-center gap-1">
+                    <i class="fas fa-globe text-slate-400"></i>
+                    <select id="currency-select" class="bg-transparent text-slate-200 text-xs font-semibold focus:outline-none cursor-pointer">
+                        <option value="LKR" class="bg-slate-900 text-white">LKR (Rs.)</option>
+                        <option value="USD" class="bg-slate-900 text-white">USD ($)</option>
+                    </select>
+                </div>
+
+                <a id="store-hotline-link" href="tel:+94771234567" class="hover:text-rose-400 transition flex items-center gap-1 font-semibold">
+                    <i class="fas fa-phone text-rose-500"></i> <span id="store-hotline-text">+94 77 123 4567</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. HEADER -->
+    <header class="sticky top-0 z-40 bg-white border-b border-slate-200/80 shadow-sm glass-header">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+            
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 bg-gradient-to-tr from-rose-600 to-amber-500 rounded-xl flex items-center justify-center text-white shadow-md">
+                    <i class="fas fa-store text-xl"></i>
+                </div>
+                <div>
+                    <span id="store-logo-name" class="text-xl font-black tracking-tight text-slate-900">MY STORE</span>
+                    <span id="store-tagline" class="block text-[10px] font-bold text-slate-400 tracking-widest uppercase -mt-1">Online Shop</span>
+                </div>
+            </a>
+
+            <!-- Search Bar -->
+            <div class="flex-1 max-w-2xl hidden md:block">
+                <div class="relative flex items-center border-2 border-slate-200 rounded-2xl overflow-hidden bg-slate-50">
+                    <input type="text" id="main-search-input" placeholder="Search store items..." class="w-full px-4 py-2.5 bg-transparent text-sm text-slate-800 placeholder-slate-400 focus:outline-none">
+                    <button class="bg-rose-600 text-white px-5 py-2.5 text-sm font-bold flex items-center gap-2">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cart Action -->
+            <div class="flex items-center gap-4">
+                <button class="cart-drawer-toggle bg-slate-900 hover:bg-rose-600 text-white px-4 py-2 rounded-xl flex items-center gap-2.5 transition shadow-md">
+                    <div class="relative">
+                        <i class="fas fa-shopping-bag text-lg"></i>
+                        <span class="cart-count-badge hidden absolute -top-2 -right-2.5 bg-rose-500 text-white text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center border-2 border-slate-900">0</span>
+                    </div>
+                    <div class="text-left hidden sm:block">
+                        <span class="block text-[10px] text-slate-400 font-semibold uppercase leading-none">Cart</span>
+                        <span id="cart-total-preview" class="text-xs font-bold leading-tight">Items</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow">
+        <section class="max-w-7xl mx-auto px-4 py-6">
+            <div class="relative rounded-3xl overflow-hidden shadow-xl bg-gradient-to-r from-slate-950 via-slate-900 to-rose-950 text-white p-8 md:p-12 min-h-[300px] flex flex-col justify-between">
+                <div class="relative z-10 max-w-xl space-y-3">
+                    <span class="bg-rose-600 text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">OFFICIAL ONLINE STORE</span>
+                    <h1 id="hero-store-title" class="text-3xl md:text-5xl font-black tracking-tight">Welcome to Store</h1>
+                    <p id="hero-store-subtitle" class="text-slate-300 text-xs md:text-sm leading-relaxed">Shop 100% original products with warranty and fast delivery across Sri Lanka.</p>
+                </div>
+
+                <div class="relative z-10 mt-6 flex gap-3">
+                    <a href="#catalog" class="bg-rose-600 hover:bg-rose-700 text-white font-extrabold px-6 py-3 rounded-2xl text-xs shadow-lg transition">Explore Products</a>
+                    <a id="hero-whatsapp-btn" href="#" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-3 rounded-2xl text-xs transition flex items-center gap-2">
+                        <i class="fab fa-whatsapp text-base"></i> WhatsApp Order
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="catalog" class="max-w-7xl mx-auto px-4 py-8">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 class="text-2xl font-black text-slate-900">Store Products</h2>
+                    <p class="text-slate-500 text-xs mt-1">Browse available items in stock</p>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 product-grid-container">
+                <!-- Dynamically rendered -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-950 text-slate-400 text-xs border-t border-slate-800 mt-12 py-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-3">
+            <p id="footer-store-name" class="text-white font-black text-lg">MY STORE</p>
+            <p>© 2026 Powered by StoreCraft Multi-Tenant Platform.</p>
+        </div>
+    </footer>
+
+    <!-- DYNAMIC MULTI-TENANT SCRIPT -->
+    <script src="js/products-data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const shopSlug = urlParams.get('shop') || 'simplytek';
+
+            let currentStore = null;
+            let currentProducts = [];
+
+            // 1. Try REST API
+            try {
+                const res = await fetch(`/api/stores/${shopSlug}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    currentStore = data.store;
+                    currentProducts = data.products || [];
+                }
+            } catch (e) {
+                console.warn("API offline, loading from local data fallback...");
+            }
+
+            // 2. Fallback to LocalStorage if offline or no products returned
+            if (!currentProducts || currentProducts.length === 0) {
+                const localSaved = localStorage.getItem('simply_admin_products');
+                if (localSaved) {
+                    try {
+                        currentProducts = JSON.parse(localSaved);
+                    } catch(err) {}
+                }
+                if (!currentProducts || currentProducts.length === 0) {
+                    currentProducts = typeof PRODUCTS_DATA !== 'undefined' ? PRODUCTS_DATA : [];
+                }
+            }
+
+            if (!currentStore) {
+                const savedSettings = localStorage.getItem('simply_store_settings');
+                currentStore = savedSettings ? JSON.parse(savedSettings) : {
+                    slug: shopSlug,
+                    name: shopSlug.toUpperCase(),
+                    tagline: "Online Store",
+                    hotline: "+94 77 123 4567",
+                    whatsappNumber: "94771234567",
+                    announcementText: "Free Islandwide Delivery Available"
+                };
+            }
+
+            // Robust multi-key fallback (name, storeName, store_name) to prevent undefined
+            const storeName = currentStore?.name || currentStore?.storeName || currentStore?.store_name || (shopSlug ? shopSlug.toUpperCase() : 'ONLINE STORE');
+            const storeTagline = currentStore?.tagline || 'Online Tech Store';
+            const storeAnnouncement = currentStore?.announcementText || currentStore?.announcement || 'Free Islandwide Delivery on orders over Rs. 10,000 | Cash on Delivery Available';
+            const storeHotline = currentStore?.hotline || '+94 77 123 4567';
+            const storeWhatsapp = currentStore?.whatsappNumber || currentStore?.whatsapp_number || '94771234567';
+
+            // Populate Store Branding DOM
+            document.title = `${storeName} | Online Store`;
+            if (document.getElementById('store-logo-name')) document.getElementById('store-logo-name').textContent = storeName;
+            if (document.getElementById('store-tagline')) document.getElementById('store-tagline').textContent = storeTagline;
+            if (document.getElementById('store-announcement')) document.getElementById('store-announcement').innerHTML = `<i class="fas fa-truck-fast"></i> ${storeAnnouncement}`;
+            if (document.getElementById('store-hotline-text')) document.getElementById('store-hotline-text').textContent = storeHotline;
+            if (document.getElementById('store-hotline-link')) document.getElementById('store-hotline-link').href = `tel:${storeHotline.replace(/\s+/g, '')}`;
+            if (document.getElementById('hero-store-title')) document.getElementById('hero-store-title').textContent = `Welcome to ${storeName}`;
+            if (document.getElementById('hero-store-subtitle')) document.getElementById('hero-store-subtitle').textContent = storeTagline;
+            if (document.getElementById('hero-whatsapp-btn')) document.getElementById('hero-whatsapp-btn').href = `https://wa.me/${storeWhatsapp}?text=Hi%20${encodeURIComponent(storeName)}%2C%20I%20have%20an%20inquiry`;
+            if (document.getElementById('footer-store-name')) document.getElementById('footer-store-name').textContent = storeName;
+
+            // Render Products Grid
+            const container = document.querySelector('.product-grid-container');
+            if (container) {
+                if (currentProducts.length === 0) {
+                    container.innerHTML = '<p class="col-span-full text-center py-12 text-slate-400">No products added to this store yet.</p>';
+                } else {
+                    container.innerHTML = currentProducts.map(p => {
+                        const inStock = p.inStock !== false;
+                        return `
+                        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg transition p-4 flex flex-col justify-between ${!inStock ? 'opacity-70' : ''}">
+                            <div class="aspect-square bg-slate-50 rounded-xl overflow-hidden mb-3 relative">
+                                <img src="${p.image || 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600'}" class="w-full h-full object-cover">
+                                ${!inStock ? '<span class="absolute top-2 left-2 bg-slate-900 text-white text-[10px] font-bold px-2 py-0.5 rounded">OUT OF STOCK</span>' : ''}
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold text-rose-600 uppercase">${p.brand || 'Generic'}</span>
+                                <h3 class="font-bold text-slate-800 text-sm line-clamp-2">${p.title}</h3>
+                                <div class="mt-3 flex items-center justify-between">
+                                    <span class="text-rose-600 font-extrabold text-sm">Rs. ${(p.priceLKR || 0).toLocaleString()}</span>
+                                    <button onclick="alert('Added to Cart!')" class="${inStock ? 'bg-slate-900 hover:bg-rose-600' : 'bg-slate-300 cursor-not-allowed'} text-white text-xs font-bold px-3 py-1.5 rounded-lg" ${!inStock ? 'disabled' : ''}>${inStock ? 'Add' : 'Sold Out'}</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    }).join('');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

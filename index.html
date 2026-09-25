@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StoreCraft Platform | Create Your Online E-Commerce Store in 60 Seconds</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 flex flex-col min-h-screen">
+
+    <!-- PLATFORM HEADER -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-gradient-to-tr from-rose-600 to-amber-500 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg">
+                    <i class="fas fa-store"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-black tracking-tight text-white">STORE<span class="text-rose-500">CRAFT</span></span>
+                    <span class="block text-[10px] font-bold text-slate-400 tracking-widest uppercase -mt-1">Multi-Store SaaS Engine</span>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-3">
+                <a href="#register-form" class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-xl text-xs font-extrabold transition shadow-md shadow-rose-600/30 flex items-center gap-2">
+                    <i class="fas fa-plus-circle"></i> Create Your Store
+                </a>
+                <a href="admin/index.html" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-xl text-xs font-bold transition border border-slate-700">
+                    Merchant Login
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO & MERCHANT ONBOARDING SECTION -->
+    <main class="flex-grow">
+        <section class="max-w-7xl mx-auto px-4 py-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            <!-- Left Info Column -->
+            <div class="space-y-6">
+                <span class="bg-rose-600/20 text-rose-400 border border-rose-500/30 font-black text-xs px-3.5 py-1.5 rounded-full uppercase tracking-wider inline-flex items-center gap-2">
+                    <i class="fas fa-rocket"></i> E-Commerce Platform for Small Businesses
+                </span>
+                
+                <h1 class="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight">
+                    Build Your Own <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-300 to-emerald-400">Online Store</span> in 60 Seconds
+                </h1>
+
+                <p class="text-slate-400 text-sm md:text-base leading-relaxed">
+                    Zero technical or coding knowledge required! Designed specifically for Instagram, Facebook, and local shop owners in Sri Lanka.
+                </p>
+
+                <div class="grid grid-cols-2 gap-4 text-xs font-semibold text-slate-300 pt-4 border-t border-slate-800">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-check-circle text-emerald-400 text-base"></i> 1-Click WhatsApp Ordering
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-check-circle text-emerald-400 text-base"></i> Koko / Mintpay 3x Installments
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-check-circle text-emerald-400 text-base"></i> Mobile Admin Dashboard
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-check-circle text-emerald-400 text-base"></i> Cash on Delivery Support
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Registration Card -->
+            <div id="register-form" class="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl space-y-6">
+                <div>
+                    <h2 class="text-2xl font-black text-white">Create Your Store Now</h2>
+                    <p class="text-xs text-slate-400 mt-1">Fill out the form below to launch your branded online shop immediately.</p>
+                </div>
+
+                <form id="onboarding-form" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">Store Name *</label>
+                        <input type="text" id="reg-store-name" required placeholder="e.g. SimplyTek / MobileHub" class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-xs font-bold text-white focus:outline-none focus:border-rose-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">Custom Store URL (Slug) *</label>
+                        <div class="flex items-center bg-slate-950 border border-slate-800 rounded-xl overflow-hidden text-xs text-slate-400 px-3 py-3">
+                            <span class="text-slate-500 font-mono select-none">store.com/store.html?shop=</span>
+                            <input type="text" id="reg-store-slug" required placeholder="simplytek" class="w-full bg-transparent text-rose-400 font-bold focus:outline-none ml-1">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1">Owner Email *</label>
+                            <input type="email" id="reg-owner-email" required placeholder="shopowner@gmail.com" class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-xs font-medium text-white focus:outline-none focus:border-rose-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1">Admin Password *</label>
+                            <input type="password" id="reg-password" required placeholder="••••••••" class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-xs font-medium text-white focus:outline-none focus:border-rose-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">WhatsApp Order Hotline *</label>
+                        <input type="text" id="reg-whatsapp" required placeholder="0771234567" class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-xs font-medium text-white focus:outline-none focus:border-rose-500">
+                    </div>
+
+                    <button type="submit" id="reg-btn" class="w-full bg-gradient-to-r from-rose-600 to-amber-500 hover:from-rose-700 hover:to-amber-600 text-white font-black py-3.5 rounded-xl text-sm transition shadow-xl shadow-rose-600/30 flex items-center justify-center gap-2">
+                        <i class="fas fa-magic"></i> Launch My Store Now
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ACTIVE MERCHANT STORES DIRECTORY -->
+        <section class="max-w-7xl mx-auto px-4 py-12 border-t border-slate-900">
+            <div class="text-center mb-8">
+                <span class="text-rose-500 text-xs font-black uppercase tracking-widest">STORE DIRECTORY</span>
+                <h2 class="text-2xl font-black text-white mt-1">Explore Stores Built on StoreCraft</h2>
+            </div>
+
+            <div id="stores-directory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Loaded dynamically -->
+            </div>
+        </section>
+    </main>
+
+    <!-- SUCCESS REGISTRATION MODAL -->
+    <div id="reg-success-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 max-w-md w-full text-center space-y-4 shadow-2xl">
+            <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center text-3xl mx-auto border border-emerald-500/40">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2 class="text-2xl font-black text-white">Your Store is Ready! 🎉</h2>
+            <p class="text-xs text-slate-400 leading-relaxed">
+                Congratulations! Your store <strong id="created-store-name" class="text-rose-400">SimplyTek</strong> has been launched successfully.
+            </p>
+
+            <div class="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-3 text-left">
+                <div>
+                    <span class="block text-[10px] text-slate-500 uppercase font-bold">Public Store Link</span>
+                    <a id="link-public-store" href="#" target="_blank" class="text-xs font-bold text-emerald-400 hover:underline break-all"></a>
+                </div>
+                <div>
+                    <span class="block text-[10px] text-slate-500 uppercase font-bold">Admin Dashboard Link</span>
+                    <a id="link-admin-store" href="#" target="_blank" class="text-xs font-bold text-rose-400 hover:underline break-all"></a>
+                </div>
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <a id="btn-open-store" href="#" target="_blank" class="flex-1 bg-rose-600 text-white font-bold py-2.5 rounded-xl text-xs text-center shadow">Visit Store</a>
+                <a id="btn-open-admin" href="#" target="_blank" class="flex-1 bg-slate-800 text-white font-bold py-2.5 rounded-xl text-xs text-center border border-slate-700">Open Admin</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const storeNameInput = document.getElementById('reg-store-name');
+            const storeSlugInput = document.getElementById('reg-store-slug');
+            const directoryGrid = document.getElementById('stores-directory-grid');
+
+            // Auto-generate slug from store name
+            storeNameInput?.addEventListener('input', (e) => {
+                if (storeSlugInput) {
+                    storeSlugInput.value = e.target.value.toLowerCase().replace(/[^a-z0-9]/g, '');
+                }
+            });
+
+            // Fetch Active Stores Directory
+            async function loadStoresDirectory() {
+                try {
+                    const res = await fetch('/api/stores');
+                    const stores = await res.json();
+
+                    if (!stores || stores.length === 0) {
+                        if (directoryGrid) directoryGrid.innerHTML = '<p class="text-slate-500 text-xs col-span-full text-center py-6">No stores registered yet. Be the first!</p>';
+                        return;
+                    }
+
+                    if (directoryGrid) {
+                        directoryGrid.innerHTML = stores.map(s => `
+                            <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl flex flex-col justify-between hover:border-rose-500/50 transition">
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-xs font-black text-rose-400 uppercase tracking-wide">${s.slug}</span>
+                                        <span class="bg-slate-800 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded">${s.productCount || 0} Products</span>
+                                    </div>
+                                    <h3 class="text-lg font-black text-white">${s.name}</h3>
+                                    <p class="text-xs text-slate-400 mt-1 line-clamp-2">${s.tagline || 'Online Store'}</p>
+                                </div>
+
+                                <div class="mt-6 flex items-center justify-between gap-3 pt-4 border-t border-slate-800/80">
+                                    <a href="store.html?shop=${s.slug}" target="_blank" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 px-3 rounded-xl text-xs text-center transition">
+                                        Visit Shop <i class="fas fa-arrow-right text-[10px]"></i>
+                                    </a>
+                                    <a href="admin/index.html?shop=${s.slug}" target="_blank" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs border border-slate-700">
+                                        Admin
+                                    </a>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                } catch (e) {
+                    console.error("Failed to load stores:", e);
+                }
+            }
+
+            loadStoresDirectory();
+
+            // Store Registration Function (Direct Supabase Cloud Insertion + Backend Sync)
+            async function handleStoreRegistration(e) {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+
+                console.log("🚀 Registration Triggered!");
+
+                const storeNameEl = document.getElementById('reg-store-name');
+                const storeSlugEl = document.getElementById('reg-store-slug');
+                const ownerEmailEl = document.getElementById('reg-owner-email');
+                const passwordEl = document.getElementById('reg-password');
+                const whatsappEl = document.getElementById('reg-whatsapp');
+                const btn = document.getElementById('reg-btn');
+
+                const sName = storeNameEl ? storeNameEl.value.trim() : '';
+                const sSlug = storeSlugEl ? storeSlugEl.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '') : '';
+                const sEmail = ownerEmailEl ? ownerEmailEl.value.trim() : '';
+                const sPass = passwordEl ? passwordEl.value : '';
+                const sWhatsapp = whatsappEl ? whatsappEl.value.trim() : '';
+
+                if (!sName || !sSlug || !sEmail || !sPass) {
+                    alert('Please fill in all required fields (Store Name, Slug, Email, Password)!');
+                    return;
+                }
+
+                if (btn) {
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering on Supabase...';
+                }
+
+                const storePayload = {
+                    slug: sSlug,
+                    name: sName,
+                    whatsapp: sWhatsapp || '94771234567'
+                };
+
+                console.log("⚡ Executing Direct POST Fetch Request to Supabase Cloud API...", storePayload);
+
+                // 1. Direct Supabase Cloud REST API HTTP Request
+                try {
+                    const supaRes = await fetch('https://ldjsjlkyfztnavwdcurz.supabase.co/rest/v1/stores', {
+                        method: 'POST',
+                        headers: {
+                            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkanNqbGt5Znp0bmF2d2RjdXJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMzY2MTUsImV4cCI6MjEwNTgxMjYxNX0.ragMF45p3QdC3VkzaEbI3HPXuNWDbCBvkYw0zHla8G4',
+                            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkanNqbGt5Znp0bmF2d2RjdXJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMzY2MTUsImV4cCI6MjEwNTgxMjYxNX0.ragMF45p3QdC3VkzaEbI3HPXuNWDbCBvkYw0zHla8G4',
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=representation'
+                        },
+                        body: JSON.stringify(storePayload)
+                    });
+
+                    console.log("Supabase HTTP Status:", supaRes.status);
+                    if (supaRes.ok) {
+                        const resData = await supaRes.json();
+                        console.log("✅ Supabase Insert Success:", resData);
+                    } else {
+                        const errText = await supaRes.text();
+                        console.warn("Supabase API Response:", errText);
+                    }
+                } catch (supaErr) {
+                    console.error("Supabase Direct Insert Error:", supaErr);
+                }
+
+                // 2. Also notify API server (/api/stores/register)
+                try {
+                    await fetch('/api/stores/register', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            storeName: sName,
+                            name: sName,
+                            storeSlug: sSlug,
+                            slug: sSlug,
+                            ownerEmail: sEmail,
+                            password: sPass,
+                            whatsappNumber: sWhatsapp
+                        })
+                    });
+                } catch (apiErr) {}
+
+                // Save active store settings in LocalStorage
+                localStorage.setItem('simply_store_settings', JSON.stringify({
+                    slug: sSlug,
+                    name: sName,
+                    storeName: sName,
+                    whatsappNumber: sWhatsapp,
+                    hotline: '+94 77 123 4567',
+                    tagline: 'Online Store',
+                    announcementText: 'Free Islandwide Delivery Available'
+                }));
+
+                // Populate and show success modal
+                const publicUrl = `${window.location.origin}/store.html?shop=${sSlug}`;
+                const adminUrl = `${window.location.origin}/admin/index.html?shop=${sSlug}`;
+
+                const createdStoreNameEl = document.getElementById('created-store-name');
+                if (createdStoreNameEl) createdStoreNameEl.textContent = sName;
+
+                const linkPub = document.getElementById('link-public-store');
+                if (linkPub) {
+                    linkPub.href = publicUrl;
+                    linkPub.textContent = publicUrl;
+                }
+
+                const linkAdm = document.getElementById('link-admin-store');
+                if (linkAdm) {
+                    linkAdm.href = adminUrl;
+                    linkAdm.textContent = adminUrl;
+                }
+
+                const btnOpenStore = document.getElementById('btn-open-store');
+                if (btnOpenStore) btnOpenStore.href = publicUrl;
+
+                const btnOpenAdmin = document.getElementById('btn-open-admin');
+                if (btnOpenAdmin) btnOpenAdmin.href = adminUrl;
+
+                document.getElementById('reg-success-modal')?.classList.remove('hidden');
+
+                loadStoresDirectory();
+
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-magic"></i> Launch My Store Now';
+                }
+            }
+
+            // Bind to Form Submit and Button Click as fail-safe
+            const onboardingForm = document.getElementById('onboarding-form') || document.querySelector('form');
+            onboardingForm?.addEventListener('submit', handleStoreRegistration);
+
+            const regBtn = document.getElementById('reg-btn');
+            regBtn?.addEventListener('click', (e) => {
+                if (onboardingForm && onboardingForm.checkValidity && onboardingForm.checkValidity()) {
+                    handleStoreRegistration(e);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
