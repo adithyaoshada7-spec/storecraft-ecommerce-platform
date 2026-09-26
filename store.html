@@ -196,21 +196,7 @@
                 } catch (e) {}
             }
 
-            // 3. Fallback for default seed store (simplytek) in offline development mode
-            if (!storeExists && shopSlug === 'simplytek') {
-                currentStore = {
-                    slug: 'simplytek',
-                    name: 'SimplyTek Official',
-                    tagline: 'Online Tech Store',
-                    hotline: '+94 77 123 4567',
-                    whatsappNumber: '94771234567',
-                    announcementText: 'Free Islandwide Delivery Available'
-                };
-                currentProducts = typeof PRODUCTS_DATA !== 'undefined' ? PRODUCTS_DATA : [];
-                storeExists = true;
-            }
-
-            // 4. IF STORE NOT FOUND IN SUPABASE: SHOW 404 ERROR PAGE
+            // 3. IF STORE NOT FOUND IN SUPABASE DATABASE: STRICTLY SHOW 404 ERROR PAGE
             if (!storeExists) {
                 render404StoreNotFound(shopSlug);
                 return;

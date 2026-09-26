@@ -69,11 +69,6 @@ function getAdminProducts() {
     if (saved) {
         return JSON.parse(saved);
     }
-    // Fallback to initial PRODUCTS_DATA from products-data.js
-    if (typeof PRODUCTS_DATA !== 'undefined') {
-        localStorage.setItem('simply_admin_products', JSON.stringify(PRODUCTS_DATA));
-        return PRODUCTS_DATA;
-    }
     return [];
 }
 

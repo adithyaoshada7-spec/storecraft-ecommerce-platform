@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 products = getAdminProducts();
             } else {
                 const saved = localStorage.getItem('simply_admin_products');
-                products = saved ? JSON.parse(saved) : (typeof PRODUCTS_DATA !== 'undefined' ? PRODUCTS_DATA : []);
+                products = saved ? JSON.parse(saved) : [];
             }
         }
 

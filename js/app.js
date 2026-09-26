@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error("Error parsing admin products from localStorage:", e);
             }
         }
-        return typeof PRODUCTS_DATA !== 'undefined' ? PRODUCTS_DATA : [];
+        return [];
     }
 
     // Helper to fetch live store settings (from Admin localStorage)
