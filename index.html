@@ -246,7 +246,7 @@
                 const sName = storeNameEl ? storeNameEl.value.trim() : '';
                 const sSlug = storeSlugEl ? storeSlugEl.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '') : '';
                 const sEmail = ownerEmailEl ? ownerEmailEl.value.trim() : '';
-                const sPass = passwordEl ? passwordEl.value : '';
+                const sPass = passwordEl ? passwordEl.value.trim() : '';
                 const sWhatsapp = whatsappEl ? whatsappEl.value.trim() : '';
 
                 if (!sName || !sSlug || !sEmail || !sPass) {
