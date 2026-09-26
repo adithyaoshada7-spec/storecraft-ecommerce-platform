@@ -122,56 +122,107 @@
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const shopSlug = urlParams.get('shop') || 'simplytek';
+            const shopSlug = (urlParams.get('shop') || 'simplytek').toLowerCase().trim();
 
             let currentStore = null;
             let currentProducts = [];
+            let storeExists = false;
 
-            // 1. Try REST API
+            const SUPABASE_URL = "https://ldjsjlkyfztnavwdcurz.supabase.co";
+            const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkanNqbGt5Znp0bmF2d2RjdXJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMzY2MTUsImV4cCI6MjEwNTgxMjYxNX0.ragMF45p3QdC3VkzaEbI3HPXuNWDbCBvkYw0zHla8G4";
+
+            // 1. Direct Supabase Cloud REST API Verification
             try {
-                const res = await fetch(`/api/stores/${shopSlug}`);
-                if (res.ok) {
-                    const data = await res.json();
-                    currentStore = data.store;
-                    currentProducts = data.products || [];
+                const supaRes = await fetch(`${SUPABASE_URL}/rest/v1/stores?slug=eq.${encodeURIComponent(shopSlug)}&select=*`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+
+                if (supaRes.ok) {
+                    const supaStores = await supaRes.json();
+                    if (Array.isArray(supaStores) && supaStores.length > 0) {
+                        currentStore = supaStores[0];
+                        storeExists = true;
+
+                        // Fetch products for this store from Supabase
+                        try {
+                            const prodRes = await fetch(`${SUPABASE_URL}/rest/v1/products?store_slug=eq.${encodeURIComponent(shopSlug)}&select=*`, {
+                                headers: {
+                                    'apikey': SUPABASE_KEY,
+                                    'Authorization': `Bearer ${SUPABASE_KEY}`
+                                }
+                            });
+                            if (prodRes.ok) {
+                                const prodData = await prodRes.json();
+                                if (Array.isArray(prodData)) {
+                                    currentProducts = prodData.map(p => ({
+                                        id: p.id,
+                                        storeSlug: p.store_slug,
+                                        title: p.title,
+                                        category: p.category,
+                                        brand: p.brand,
+                                        priceLKR: Number(p.price_lkr),
+                                        originalPriceLKR: p.original_price_lkr ? Number(p.original_price_lkr) : null,
+                                        inStock: p.in_stock,
+                                        image: p.image,
+                                        badge: p.badge,
+                                        description: p.description
+                                    }));
+                                }
+                            }
+                        } catch (prodErr) {
+                            console.warn("Products fetch warning:", prodErr);
+                        }
+                    }
                 }
             } catch (e) {
-                console.warn("API offline, loading from local data fallback...");
+                console.warn("Direct Supabase fetch failed:", e);
             }
 
-            // 2. Fallback to LocalStorage if offline or no products returned
-            if (!currentProducts || currentProducts.length === 0) {
-                const localSaved = localStorage.getItem('simply_admin_products');
-                if (localSaved) {
-                    try {
-                        currentProducts = JSON.parse(localSaved);
-                    } catch(err) {}
-                }
-                if (!currentProducts || currentProducts.length === 0) {
-                    currentProducts = typeof PRODUCTS_DATA !== 'undefined' ? PRODUCTS_DATA : [];
-                }
+            // 2. Try REST API endpoint (/api/stores/:slug) if direct fetch did not succeed
+            if (!storeExists) {
+                try {
+                    const res = await fetch(`/api/stores/${shopSlug}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && data.store) {
+                            currentStore = data.store;
+                            currentProducts = data.products || [];
+                            storeExists = true;
+                        }
+                    }
+                } catch (e) {}
             }
 
-            if (!currentStore) {
-                const savedSettings = localStorage.getItem('simply_store_settings');
-                currentStore = savedSettings ? JSON.parse(savedSettings) : {
-                    slug: shopSlug,
-                    name: shopSlug.toUpperCase(),
-                    tagline: "Online Store",
-                    hotline: "+94 77 123 4567",
-                    whatsappNumber: "94771234567",
-                    announcementText: "Free Islandwide Delivery Available"
+            // 3. Fallback for default seed store (simplytek) in offline development mode
+            if (!storeExists && shopSlug === 'simplytek') {
+                currentStore = {
+                    slug: 'simplytek',
+                    name: 'SimplyTek Official',
+                    tagline: 'Online Tech Store',
+                    hotline: '+94 77 123 4567',
+                    whatsappNumber: '94771234567',
+                    announcementText: 'Free Islandwide Delivery Available'
                 };
+                currentProducts = typeof PRODUCTS_DATA !== 'undefined' ? PRODUCTS_DATA : [];
+                storeExists = true;
             }
 
-            // Robust multi-key fallback (name, storeName, store_name) to prevent undefined
-            const storeName = currentStore?.name || currentStore?.storeName || currentStore?.store_name || (shopSlug ? shopSlug.toUpperCase() : 'ONLINE STORE');
-            const storeTagline = currentStore?.tagline || 'Online Tech Store';
-            const storeAnnouncement = currentStore?.announcementText || currentStore?.announcement || 'Free Islandwide Delivery on orders over Rs. 10,000 | Cash on Delivery Available';
-            const storeHotline = currentStore?.hotline || '+94 77 123 4567';
-            const storeWhatsapp = currentStore?.whatsappNumber || currentStore?.whatsapp_number || '94771234567';
+            // 4. IF STORE NOT FOUND IN SUPABASE: SHOW 404 ERROR PAGE
+            if (!storeExists) {
+                render404StoreNotFound(shopSlug);
+                return;
+            }
 
             // Populate Store Branding DOM
+            const storeName = currentStore?.name || currentStore?.storeName || shopSlug.toUpperCase();
+            const storeTagline = currentStore?.tagline || 'Online Store';
+            const storeAnnouncement = currentStore?.announcementText || currentStore?.announcement || 'Free Islandwide Delivery Available';
+            const storeHotline = currentStore?.hotline || '+94 77 123 4567';
+            const storeWhatsapp = currentStore?.whatsapp || currentStore?.whatsappNumber || currentStore?.whatsapp_number || '94771234567';
+
             document.title = `${storeName} | Online Store`;
             if (document.getElementById('store-logo-name')) document.getElementById('store-logo-name').textContent = storeName;
             if (document.getElementById('store-tagline')) document.getElementById('store-tagline').textContent = storeTagline;
@@ -211,6 +262,35 @@
                 }
             }
         });
+
+        // 404 Store Not Found Error Renderer
+        function render404StoreNotFound(slug) {
+            document.title = "404 - Store Not Found | StoreCraft";
+            document.body.className = "bg-slate-950 text-slate-100 flex items-center justify-center min-h-screen p-4";
+            document.body.innerHTML = `
+                <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 text-center space-y-6 shadow-2xl">
+                    <div class="w-20 h-20 bg-rose-500/10 text-rose-500 rounded-full flex items-center justify-center text-4xl mx-auto border border-rose-500/20">
+                        <i class="fas fa-store-slash"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <span class="bg-rose-600/20 text-rose-400 border border-rose-500/30 font-black text-xs px-3.5 py-1 rounded-full uppercase tracking-wider">404 NOT FOUND</span>
+                        <h1 class="text-2xl font-black text-white">Store Not Found</h1>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            The store <strong class="text-rose-400 font-mono">"${slug}"</strong> does not exist in the database or has been deleted.
+                        </p>
+                    </div>
+
+                    <div class="pt-4 flex flex-col gap-3">
+                        <a href="index.html#register-form" class="w-full bg-gradient-to-r from-rose-600 to-amber-500 hover:from-rose-700 hover:to-amber-600 text-white font-extrabold py-3.5 rounded-xl text-xs transition shadow-lg flex items-center justify-center gap-2">
+                            <i class="fas fa-plus-circle"></i> Create "${slug}" Store Now
+                        </a>
+                        <a href="index.html" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-3 rounded-xl text-xs transition border border-slate-700 flex items-center justify-center gap-2">
+                            <i class="fas fa-home"></i> Back to Main Directory
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
     </script>
 </body>
 </html>

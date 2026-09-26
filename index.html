@@ -172,40 +172,56 @@
 
             // Fetch Active Stores Directory
             async function loadStoresDirectory() {
+                let stores = [];
+                const SUPABASE_URL = "https://ldjsjlkyfztnavwdcurz.supabase.co";
+                const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkanNqbGt5Znp0bmF2d2RjdXJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMzY2MTUsImV4cCI6MjEwNTgxMjYxNX0.ragMF45p3QdC3VkzaEbI3HPXuNWDbCBvkYw0zHla8G4";
+
                 try {
-                    const res = await fetch('/api/stores');
-                    const stores = await res.json();
-
-                    if (!stores || stores.length === 0) {
-                        if (directoryGrid) directoryGrid.innerHTML = '<p class="text-slate-500 text-xs col-span-full text-center py-6">No stores registered yet. Be the first!</p>';
-                        return;
+                    const supaRes = await fetch(`${SUPABASE_URL}/rest/v1/stores?select=*`, {
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${SUPABASE_KEY}`
+                        }
+                    });
+                    if (supaRes.ok) {
+                        stores = await supaRes.json();
                     }
+                } catch (e) {}
 
-                    if (directoryGrid) {
-                        directoryGrid.innerHTML = stores.map(s => `
-                            <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl flex flex-col justify-between hover:border-rose-500/50 transition">
-                                <div>
-                                    <div class="flex items-center justify-between mb-2">
-                                        <span class="text-xs font-black text-rose-400 uppercase tracking-wide">${s.slug}</span>
-                                        <span class="bg-slate-800 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded">${s.productCount || 0} Products</span>
-                                    </div>
-                                    <h3 class="text-lg font-black text-white">${s.name}</h3>
-                                    <p class="text-xs text-slate-400 mt-1 line-clamp-2">${s.tagline || 'Online Store'}</p>
-                                </div>
+                if (!stores || stores.length === 0) {
+                    try {
+                        const res = await fetch('/api/stores');
+                        if (res.ok) stores = await res.json();
+                    } catch (e) {}
+                }
 
-                                <div class="mt-6 flex items-center justify-between gap-3 pt-4 border-t border-slate-800/80">
-                                    <a href="store.html?shop=${s.slug}" target="_blank" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 px-3 rounded-xl text-xs text-center transition">
-                                        Visit Shop <i class="fas fa-arrow-right text-[10px]"></i>
-                                    </a>
-                                    <a href="admin/index.html?shop=${s.slug}" target="_blank" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs border border-slate-700">
-                                        Admin
-                                    </a>
+                if (!stores || stores.length === 0) {
+                    if (directoryGrid) directoryGrid.innerHTML = '<p class="text-slate-500 text-xs col-span-full text-center py-6">No stores registered yet. Be the first!</p>';
+                    return;
+                }
+
+                if (directoryGrid) {
+                    directoryGrid.innerHTML = stores.map(s => `
+                        <div class="bg-slate-900 border border-slate-800 p-6 rounded-3xl flex flex-col justify-between hover:border-rose-500/50 transition">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs font-black text-rose-400 uppercase tracking-wide">${s.slug}</span>
+                                    <span class="bg-slate-800 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded">Active Shop</span>
                                 </div>
+                                <h3 class="text-lg font-black text-white">${s.name}</h3>
+                                <p class="text-xs text-slate-400 mt-1 line-clamp-2">${s.tagline || 'Online Store'}</p>
                             </div>
-                        `).join('');
-                    }
-                } catch (e) {
-                    console.error("Failed to load stores:", e);
+
+                            <div class="mt-6 flex items-center justify-between gap-3 pt-4 border-t border-slate-800/80">
+                                <a href="store.html?shop=${s.slug}" target="_blank" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 px-3 rounded-xl text-xs text-center transition">
+                                    Visit Shop <i class="fas fa-arrow-right text-[10px]"></i>
+                                </a>
+                                <a href="admin/index.html?shop=${s.slug}" target="_blank" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs border border-slate-700">
+                                    Admin
+                                </a>
+                            </div>
+                        </div>
+                    `).join('');
                 }
             }
 

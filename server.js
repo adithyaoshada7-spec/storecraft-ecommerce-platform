@@ -199,32 +199,36 @@ async function handleRequest(req, res) {
         try {
             if (useSupabase) {
                 const store = await SupabaseDB.getStoreBySlug(slug);
+                if (!store) {
+                    return sendJSON(res, { error: 'Store not found', storeExists: false }, 404);
+                }
                 const products = await SupabaseDB.getProductsByStore(slug);
-                const storeName = store ? (store.name || store.store_name || store.storeName || slug.toUpperCase()) : slug.toUpperCase();
                 return sendJSON(res, {
                     store: {
-                        slug: store ? store.slug : slug,
-                        name: storeName,
-                        tagline: store ? (store.tagline || 'Online Store') : 'Online Store',
-                        hotline: store ? (store.hotline || '+94 77 123 4567') : '+94 77 123 4567',
-                        whatsappNumber: store ? (store.whatsapp_number || store.whatsappNumber || '94771234567') : '94771234567',
-                        announcementText: store ? (store.announcement_text || store.announcementText || 'Free Islandwide Delivery Available') : 'Free Islandwide Delivery Available'
+                        slug: store.slug,
+                        name: store.name || store.store_name || store.storeName || slug.toUpperCase(),
+                        tagline: store.tagline || 'Online Store',
+                        hotline: store.hotline || '+94 77 123 4567',
+                        whatsappNumber: store.whatsapp || store.whatsapp_number || '94771234567',
+                        announcementText: store.announcement_text || 'Free Islandwide Delivery Available'
                     },
                     products: products || []
                 });
             } else {
                 const db = readDb();
                 const store = db.stores.find(s => s.slug === slug);
+                if (!store) {
+                    return sendJSON(res, { error: 'Store not found', storeExists: false }, 404);
+                }
                 const products = db.products.filter(p => p.storeSlug === slug);
-                const storeName = store ? (store.name || store.storeName || store.store_name || slug.toUpperCase()) : slug.toUpperCase();
                 return sendJSON(res, {
                     store: {
-                        slug: store ? store.slug : slug,
-                        name: storeName,
-                        tagline: store ? (store.tagline || 'Online Store') : 'Online Store',
-                        hotline: store ? (store.hotline || '+94 77 123 4567') : '+94 77 123 4567',
-                        whatsappNumber: store ? (store.whatsappNumber || store.whatsapp_number || '94771234567') : '94771234567',
-                        announcementText: store ? (store.announcementText || store.announcement_text || 'Free Islandwide Delivery Available') : 'Free Islandwide Delivery Available'
+                        slug: store.slug,
+                        name: store.name || store.storeName || store.store_name || slug.toUpperCase(),
+                        tagline: store.tagline || 'Online Store',
+                        hotline: store.hotline || '+94 77 123 4567',
+                        whatsappNumber: store.whatsappNumber || store.whatsapp_number || '94771234567',
+                        announcementText: store.announcementText || store.announcement_text || 'Free Islandwide Delivery Available'
                     },
                     products: products || []
                 });
