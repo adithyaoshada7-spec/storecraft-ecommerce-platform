@@ -146,10 +146,11 @@ async function handleRequest(req, res) {
 
             if (useSupabase) {
                 const store = await SupabaseDB.getStoreBySlug(body.storeSlug);
-                if (!store || store.password !== body.password) {
+                const isValidPass = store && (store.admin_password === body.password || store.password === body.password);
+                if (!store || !isValidPass) {
                     return sendJSON(res, { error: 'Invalid Store Slug or Password.' }, 401);
                 }
-                return sendJSON(res, { success: true, store: { ...store, whatsappNumber: store.whatsapp_number, ownerEmail: store.owner_email } });
+                return sendJSON(res, { success: true, store: { ...store, whatsappNumber: store.whatsapp, ownerEmail: store.owner_email } });
             } else {
                 const db = readDb();
                 const store = db.stores.find(s => (s.slug === body.storeSlug || s.ownerEmail === body.email) && s.password === body.password);

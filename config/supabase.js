@@ -101,7 +101,8 @@ const SupabaseDB = {
         const res = await supabaseRequest('stores', 'POST', {
             slug: storeData.slug || storeData.storeSlug,
             name: storeData.name || storeData.storeName,
-            whatsapp: storeData.whatsapp || storeData.whatsappNumber || storeData.whatsapp_number || '94771234567'
+            whatsapp: storeData.whatsapp || storeData.whatsappNumber || storeData.whatsapp_number || '94771234567',
+            admin_password: storeData.password || storeData.admin_password || storeData.adminPassword
         });
         return Array.isArray(res) ? res[0] : res;
     },
