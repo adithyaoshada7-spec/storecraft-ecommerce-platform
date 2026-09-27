@@ -1,5 +1,8 @@
 // Robust Admin Panel Logic for Product Management, Customer Orders & Settings
 
+const SUPABASE_URL = "https://ldjsjlkyfztnavwdcurz.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkanNqbGt5Znp0bmF2d2RjdXJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMzY2MTUsImV4cCI6MjEwNTgxMjYxNX0.ragMF45p3QdC3VkzaEbI3HPXuNWDbCBvkYw0zHla8G4";
+
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     let activeSlug = urlParams.get('shop') || localStorage.getItem('simply_active_merchant_slug') || 'simplytek';
@@ -26,9 +29,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         localStorage.setItem('simply_active_merchant_slug', slug);
 
         let apiSuccess = false;
-
-        const SUPABASE_URL = "https://ldjsjlkyfztnavwdcurz.supabase.co";
-        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkanNqbGt5Znp0bmF2d2RjdXJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMzY2MTUsImV4cCI6MjEwNTgxMjYxNX0.ragMF45p3QdC3VkzaEbI3HPXuNWDbCBvkYw0zHla8G4";
 
         // 1. Fetch store and products directly from Supabase Cloud API
         try {
