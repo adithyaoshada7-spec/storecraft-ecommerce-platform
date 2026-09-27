@@ -120,38 +120,31 @@ const SupabaseDB = {
 
     // 2. Products
     async getProductsByStore(slug) {
-        const res = await supabaseRequest(`products?store_slug=eq.${encodeURIComponent(slug)}&select=*&order=id.desc`);
+        const res = await supabaseRequest(`products?store_slug=eq.${encodeURIComponent(slug)}&select=*&order=created_at.desc`);
         return (res || []).map(p => ({
             id: p.id,
             storeSlug: p.store_slug,
             title: p.title,
-            category: p.category,
-            brand: p.brand,
-            priceLKR: Number(p.price_lkr),
-            originalPriceLKR: p.original_price_lkr ? Number(p.original_price_lkr) : null,
-            inStock: p.in_stock,
-            isFlashSale: p.is_flash_sale,
-            flashDiscount: p.flash_discount,
-            image: p.image,
-            badge: p.badge,
-            description: p.description
+            category: p.category || 'general',
+            brand: p.brand || 'Generic',
+            priceLKR: Number(p.price !== undefined ? p.price : (p.price_lkr !== undefined ? p.price_lkr : 0)),
+            originalPriceLKR: (p.original_price || p.original_price_lkr) ? Number(p.original_price || p.original_price_lkr) : null,
+            inStock: p.in_stock !== false,
+            image: p.image || p.image_url || 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600',
+            badge: p.badge || 'NEW',
+            description: p.description || ''
         }));
     },
 
     async createProduct(productData) {
         const payload = {
-            store_slug: productData.storeSlug,
+            store_slug: productData.storeSlug || productData.store_slug,
             title: productData.title,
             category: productData.category || 'general',
-            brand: productData.brand || 'Generic',
-            price_lkr: productData.priceLKR,
-            original_price_lkr: productData.originalPriceLKR || null,
-            in_stock: productData.inStock !== false,
-            is_flash_sale: !!productData.isFlashSale,
-            flash_discount: productData.flashDiscount || null,
-            image: productData.image,
-            badge: productData.badge || 'NEW',
-            description: productData.description || ''
+            price: productData.priceLKR || productData.price || 0,
+            original_price: productData.originalPriceLKR || productData.original_price || null,
+            image_url: productData.image || productData.image_url || 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600',
+            in_stock: productData.inStock !== false
         };
 
         const res = await supabaseRequest('products', 'POST', payload);
@@ -161,13 +154,10 @@ const SupabaseDB = {
             storeSlug: p.store_slug,
             title: p.title,
             category: p.category,
-            brand: p.brand,
-            priceLKR: Number(p.price_lkr),
-            originalPriceLKR: p.original_price_lkr ? Number(p.original_price_lkr) : null,
-            inStock: p.in_stock,
-            image: p.image,
-            badge: p.badge,
-            description: p.description
+            priceLKR: Number(p.price !== undefined ? p.price : (p.price_lkr !== undefined ? p.price_lkr : 0)),
+            originalPriceLKR: (p.original_price || p.original_price_lkr) ? Number(p.original_price || p.original_price_lkr) : null,
+            inStock: p.in_stock !== false,
+            image: p.image || p.image_url || ''
         };
     },
 

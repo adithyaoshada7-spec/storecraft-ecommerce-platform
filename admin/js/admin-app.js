@@ -27,22 +27,67 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         let apiSuccess = false;
 
-        // 1. Try API Server first
-        try {
-            const res = await fetch(`/api/stores/${slug}`);
-            if (res.ok) {
-                const data = await res.json();
-                currentStore = data.store;
-                products = data.products || [];
-                apiSuccess = true;
+        const SUPABASE_URL = "https://ldjsjlkyfztnavwdcurz.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkanNqbGt5Znp0bmF2d2RjdXJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMzY2MTUsImV4cCI6MjEwNTgxMjYxNX0.ragMF45p3QdC3VkzaEbI3HPXuNWDbCBvkYw0zHla8G4";
 
-                const ordersRes = await fetch(`/api/stores/${slug}/orders`);
-                if (ordersRes.ok) {
-                    orders = await ordersRes.json();
+        // 1. Fetch store and products directly from Supabase Cloud API
+        try {
+            const storeRes = await fetch(`${SUPABASE_URL}/rest/v1/stores?slug=eq.${encodeURIComponent(slug)}&select=*`, {
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`
+                }
+            });
+
+            if (storeRes.ok) {
+                const supaStores = await storeRes.json();
+                if (Array.isArray(supaStores) && supaStores.length > 0) {
+                    currentStore = supaStores[0];
+                    apiSuccess = true;
+
+                    // Fetch products filtering strictly by store_slug
+                    const prodRes = await fetch(`${SUPABASE_URL}/rest/v1/products?store_slug=eq.${encodeURIComponent(slug)}&select=*&order=created_at.desc`, {
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${SUPABASE_KEY}`
+                        }
+                    });
+
+                    if (prodRes.ok) {
+                        const prodData = await prodRes.json();
+                        if (Array.isArray(prodData)) {
+                            products = prodData.map(p => ({
+                                id: p.id,
+                                storeSlug: p.store_slug,
+                                title: p.title,
+                                category: p.category || 'general',
+                                brand: p.brand || 'Generic',
+                                priceLKR: Number(p.price !== undefined ? p.price : (p.price_lkr !== undefined ? p.price_lkr : 0)),
+                                originalPriceLKR: (p.original_price || p.original_price_lkr) ? Number(p.original_price || p.original_price_lkr) : null,
+                                inStock: p.in_stock !== false,
+                                image: p.image || p.image_url || 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600',
+                                badge: p.badge || 'NEW',
+                                description: p.description || ''
+                            }));
+                        }
+                    }
                 }
             }
-        } catch (e) {
-            console.warn("REST API Server offline or inaccessible, loading from LocalStorage...");
+        } catch (supaErr) {
+            console.warn("Direct Supabase admin fetch warning:", supaErr);
+        }
+
+        // 2. Try REST API Server if direct fetch didn't load store
+        if (!apiSuccess) {
+            try {
+                const res = await fetch(`/api/stores/${slug}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    currentStore = data.store;
+                    products = data.products || [];
+                    apiSuccess = true;
+                }
+            } catch (e) {}
         }
 
         // 2. LocalStorage Fallback if API fails or offline
@@ -426,22 +471,45 @@ document.addEventListener('DOMContentLoaded', async () => {
                 description: description
             };
 
-            // 1. Instantly push to products array
+            // 1. Instantly push to local products array & save
             products.unshift(newProduct);
-
-            // 2. Save locally immediately
             saveLocalProducts(products);
 
-            // 3. Send to REST API Server if available
+            // 2. Direct Supabase Cloud REST API Insertion with store_slug
+            try {
+                const supaProdPayload = {
+                    store_slug: activeSlug,
+                    title: title,
+                    price: priceLKR,
+                    original_price: originalPriceLKR,
+                    category: category,
+                    image_url: image,
+                    in_stock: true
+                };
+
+                await fetch(`${SUPABASE_URL}/rest/v1/products`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(supaProdPayload)
+                });
+                console.log("✅ Product inserted into Supabase with store_slug:", activeSlug);
+            } catch (supaErr) {
+                console.warn("Direct Supabase product insertion error:", supaErr);
+            }
+
+            // 3. Send to backend REST API Server if running
             try {
                 await fetch(`/api/stores/${activeSlug}/products`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(newProduct)
                 });
-            } catch (e) {
-                console.warn("Product saved locally");
-            }
+            } catch (e) {}
 
             // 4. Update UI
             renderProductsTable();

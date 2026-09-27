@@ -161,14 +161,14 @@
                                         id: p.id,
                                         storeSlug: p.store_slug,
                                         title: p.title,
-                                        category: p.category,
-                                        brand: p.brand,
-                                        priceLKR: Number(p.price_lkr),
-                                        originalPriceLKR: p.original_price_lkr ? Number(p.original_price_lkr) : null,
-                                        inStock: p.in_stock,
-                                        image: p.image,
-                                        badge: p.badge,
-                                        description: p.description
+                                        category: p.category || 'general',
+                                        brand: p.brand || 'Generic',
+                                        priceLKR: Number(p.price !== undefined ? p.price : (p.price_lkr !== undefined ? p.price_lkr : 0)),
+                                        originalPriceLKR: (p.original_price || p.original_price_lkr) ? Number(p.original_price || p.original_price_lkr) : null,
+                                        inStock: p.in_stock !== false,
+                                        image: p.image || p.image_url || 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600',
+                                        badge: p.badge || 'NEW',
+                                        description: p.description || ''
                                     }));
                                 }
                             }
