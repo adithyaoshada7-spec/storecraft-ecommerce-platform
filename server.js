@@ -250,10 +250,10 @@ async function handleRequest(req, res) {
     }
 
     // 5. Products Operations (Add / Update / Delete)
-    const storeProductsMatch = pathname.match(/^\/api\/stores\/([a-zA-Z0-9-]+)\/products(?:\/(\d+))?$/);
+    const storeProductsMatch = pathname.match(/^\/api\/stores\/([a-zA-Z0-9-]+)\/products(?:\/([a-zA-Z0-9-]+))?$/);
     if (storeProductsMatch) {
         const slug = storeProductsMatch[1];
-        const prodId = storeProductsMatch[2] ? parseInt(storeProductsMatch[2]) : null;
+        const prodId = storeProductsMatch[2] || null;
 
         if (method === 'POST') {
             try {

@@ -286,12 +286,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Stock Toggle event handlers
         tableBody.querySelectorAll('.toggle-stock-btn').forEach(btn => {
             btn.addEventListener('click', async () => {
-                const id = parseInt(btn.dataset.id);
-                const p = products.find(item => item.id === id);
+                const id = btn.dataset.id;
+                const p = products.find(item => String(item.id) === String(id));
                 if (p) {
                     p.inStock = !p.inStock;
                     saveLocalProducts(products);
-                    
+
+                    // Direct Supabase Cloud REST API Stock Update
+                    try {
+                        await fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${encodeURIComponent(id)}`, {
+                            method: 'PATCH',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ in_stock: p.inStock })
+                        });
+                    } catch(e) {}
+
                     try {
                         await fetch(`/api/stores/${activeSlug}/products/${id}`, {
                             method: 'PUT',
@@ -310,10 +323,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Delete Product event handlers
         tableBody.querySelectorAll('.delete-prod-btn').forEach(btn => {
             btn.addEventListener('click', async () => {
-                const id = parseInt(btn.dataset.id);
-                if (confirm('Are you sure you want to delete this product?')) {
-                    products = products.filter(p => p.id !== id);
+                const id = btn.dataset.id;
+                const p = products.find(item => String(item.id) === String(id));
+                const prodTitle = p ? p.title : 'Product';
+                if (confirm(`Are you sure you want to delete "${prodTitle}"?`)) {
+                    products = products.filter(item => String(item.id) !== String(id));
                     saveLocalProducts(products);
+
+                    // Direct Supabase Cloud REST API Product Deletion
+                    try {
+                        await fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${encodeURIComponent(id)}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'apikey': SUPABASE_KEY,
+                                'Authorization': `Bearer ${SUPABASE_KEY}`
+                            }
+                        });
+                    } catch(e) {}
 
                     try {
                         await fetch(`/api/stores/${activeSlug}/products/${id}`, { method: 'DELETE' });
@@ -475,7 +501,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             products.unshift(newProduct);
             saveLocalProducts(products);
 
-            // 2. Direct Supabase Cloud REST API Insertion with store_slug
+            // 2. Direct Supabase Cloud REST API Insertion (Without passing integer ID so Supabase auto-generates UUID)
             try {
                 const supaProdPayload = {
                     store_slug: activeSlug,
@@ -487,7 +513,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     in_stock: true
                 };
 
-                await fetch(`${SUPABASE_URL}/rest/v1/products`, {
+                const supaRes = await fetch(`${SUPABASE_URL}/rest/v1/products`, {
                     method: 'POST',
                     headers: {
                         'apikey': SUPABASE_KEY,
@@ -497,7 +523,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                     },
                     body: JSON.stringify(supaProdPayload)
                 });
-                console.log("✅ Product inserted into Supabase with store_slug:", activeSlug);
+
+                if (supaRes.ok) {
+                    console.log("✅ Product inserted into Supabase with store_slug:", activeSlug);
+                    // Re-sync live products from Supabase to load the auto-generated UUID
+                    await loadStoreData(activeSlug);
+                } else {
+                    const errText = await supaRes.text();
+                    console.error("Supabase Product Insert Failed:", errText);
+                }
             } catch (supaErr) {
                 console.warn("Direct Supabase product insertion error:", supaErr);
             }
