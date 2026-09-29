@@ -220,6 +220,9 @@
             if (document.getElementById('hero-whatsapp-btn')) document.getElementById('hero-whatsapp-btn').href = `https://wa.me/${storeWhatsapp}?text=Hi%20${encodeURIComponent(storeName)}%2C%20I%20have%20an%20inquiry`;
             if (document.getElementById('footer-store-name')) document.getElementById('footer-store-name').textContent = storeName;
 
+            // Initialize Cart Badge UI from localStorage
+            updateCartUI();
+
             // Render Products Grid
             const container = document.querySelector('.product-grid-container');
             if (container) {
@@ -239,13 +242,100 @@
                                 <h3 class="font-bold text-slate-800 text-sm line-clamp-2">${p.title}</h3>
                                 <div class="mt-3 flex items-center justify-between">
                                     <span class="text-rose-600 font-extrabold text-sm">Rs. ${(p.priceLKR || 0).toLocaleString()}</span>
-                                    <button onclick="alert('Added to Cart!')" class="${inStock ? 'bg-slate-900 hover:bg-rose-600' : 'bg-slate-300 cursor-not-allowed'} text-white text-xs font-bold px-3 py-1.5 rounded-lg" ${!inStock ? 'disabled' : ''}>${inStock ? 'Add' : 'Sold Out'}</button>
+                                    <button class="add-to-cart-btn ${inStock ? 'bg-slate-900 hover:bg-rose-600' : 'bg-slate-300 cursor-not-allowed'} text-white text-xs font-bold px-3.5 py-1.5 rounded-lg transition" data-product-id="${p.id}" ${!inStock ? 'disabled' : ''}>
+                                        ${inStock ? '<i class="fas fa-cart-plus mr-1"></i> Add' : 'Sold Out'}
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     `;
                     }).join('');
                 }
+
+                // Event Delegation for Add to Cart Buttons
+                container.addEventListener('click', (e) => {
+                    const btn = e.target.closest('.add-to-cart-btn');
+                    if (btn && !btn.disabled) {
+                        const productId = btn.dataset.productId;
+                        addToCart(productId);
+                    }
+                });
+            }
+
+            // Add to Cart Function
+            function addToCart(productId) {
+                const item = currentProducts.find(p => String(p.id) === String(productId));
+                if (!item) return;
+
+                let cart = [];
+                try {
+                    const saved = localStorage.getItem('simply_cart');
+                    cart = saved ? JSON.parse(saved) : [];
+                } catch(err) {
+                    cart = [];
+                }
+
+                const existingIndex = cart.findIndex(c => String(c.id) === String(productId));
+                if (existingIndex > -1) {
+                    cart[existingIndex].qty = (cart[existingIndex].qty || 1) + 1;
+                } else {
+                    cart.push({
+                        id: item.id,
+                        title: item.title,
+                        brand: item.brand,
+                        priceLKR: item.priceLKR,
+                        image: item.image,
+                        qty: 1
+                    });
+                }
+
+                localStorage.setItem('simply_cart', JSON.stringify(cart));
+                updateCartUI();
+                showToast(`Added "${item.title}" to cart!`);
+            }
+
+            // Refresh Header Cart Badges and Total Preview
+            function updateCartUI() {
+                let cart = [];
+                try {
+                    const saved = localStorage.getItem('simply_cart');
+                    cart = saved ? JSON.parse(saved) : [];
+                } catch(err) {}
+
+                const totalQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+                const totalPrice = cart.reduce((sum, item) => sum + ((item.priceLKR || 0) * (item.qty || 1)), 0);
+
+                const countBadges = document.querySelectorAll('.cart-count-badge');
+                countBadges.forEach(badge => {
+                    badge.textContent = totalQty;
+                    if (totalQty > 0) {
+                        badge.classList.remove('hidden');
+                    } else {
+                        badge.classList.add('hidden');
+                    }
+                });
+
+                const totalPreview = document.getElementById('cart-total-preview');
+                if (totalPreview) {
+                    totalPreview.textContent = totalQty > 0 ? `Rs. ${totalPrice.toLocaleString()}` : 'Items';
+                }
+            }
+
+            // Toast Notification Renderer
+            function showToast(message) {
+                let toast = document.getElementById('store-toast');
+                if (!toast) {
+                    toast = document.createElement('div');
+                    toast.id = 'store-toast';
+                    toast.className = 'fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border border-slate-800 flex items-center gap-3 transform translate-y-10 opacity-0 transition-all duration-300 pointer-events-none text-xs font-bold';
+                    document.body.appendChild(toast);
+                }
+                toast.innerHTML = `<i class="fas fa-check-circle text-emerald-400 text-base"></i> <span>${message}</span>`;
+                toast.classList.remove('translate-y-10', 'opacity-0');
+                
+                setTimeout(() => {
+                    toast.classList.add('translate-y-10', 'opacity-0');
+                }, 3000);
             }
         });
 
