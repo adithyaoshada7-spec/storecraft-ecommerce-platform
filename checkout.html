@@ -166,13 +166,36 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        const SUPABASE_URL = "https://ldjsjlkyfztnavwdcurz.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkanNqbGt5Znp0bmF2d2RjdXJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMzY2MTUsImV4cCI6MjEwNTgxMjYxNX0.ragMF45p3QdC3VkzaEbI3HPXuNWDbCBvkYw0zHla8G4";
+
+        document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const shopSlug = urlParams.get('shop') || 'simplytek';
+            const shopSlug = (urlParams.get('shop') || localStorage.getItem('simply_active_merchant_slug') || 'simplytek').toLowerCase().trim();
 
             document.getElementById('back-to-store-link').href = `store.html?shop=${shopSlug}`;
             document.getElementById('return-home-btn').href = `store.html?shop=${shopSlug}`;
             document.getElementById('checkout-store-name').textContent = shopSlug.toUpperCase();
+
+            let currentStoreId = null;
+
+            // Fetch Store ID from Supabase
+            try {
+                const storeRes = await fetch(`${SUPABASE_URL}/rest/v1/stores?slug=eq.${encodeURIComponent(shopSlug)}&select=*`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+                if (storeRes.ok) {
+                    const storesData = await storeRes.json();
+                    if (Array.isArray(storesData) && storesData.length > 0) {
+                        currentStoreId = storesData[0].id;
+                    }
+                }
+            } catch (err) {
+                console.warn("Could not fetch store metadata:", err);
+            }
 
             const cart = JSON.parse(localStorage.getItem('simply_cart')) || [];
             const listEl = document.getElementById('checkout-items-list');
@@ -205,47 +228,73 @@
                 totalEl.textContent = `Rs. ${grandTotalLKR.toLocaleString()}`;
             }
 
-            document.getElementById('place-order-btn')?.addEventListener('click', async () => {
+            const placeOrderBtn = document.getElementById('place-order-btn');
+            placeOrderBtn?.addEventListener('click', async () => {
                 if (cart.length === 0) {
-                    alert("Your cart is empty!");
+                    alert("Your cart is empty! Please add items to your cart first.");
                     return;
                 }
 
-                const name = document.getElementById('cust-name').value || 'Customer';
-                const phone = document.getElementById('cust-phone').value || '0771234567';
-                const email = document.getElementById('cust-email').value || 'customer@gmail.com';
-                const address = document.getElementById('cust-address').value || 'Galle Road';
-                const city = document.getElementById('cust-city').value || 'Colombo';
+                const name = document.getElementById('cust-name').value.trim();
+                const phone = document.getElementById('cust-phone').value.trim();
+                const email = document.getElementById('cust-email').value.trim();
+                const address = document.getElementById('cust-address').value.trim();
+                const city = document.getElementById('cust-city').value;
                 const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || 'Cash on Delivery';
 
-                const orderPayload = {
-                    customerName: name,
-                    phone: phone,
-                    email: email,
-                    address: address,
-                    city: city,
-                    items: cart,
-                    totalLKR: grandTotalLKR,
-                    paymentMethod: paymentMethod
-                };
-
-                let assignedOrderId = `ST-${Math.floor(10000 + Math.random() * 90000)}`;
-
-                try {
-                    const res = await fetch(`/api/stores/${shopSlug}/orders`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(orderPayload)
-                    });
-                    const data = await res.json();
-                    if (data.order) assignedOrderId = data.order.id;
-                } catch (e) {
-                    console.warn("Offline order placement fallback...");
+                if (!name || !phone || !address) {
+                    alert("Please fill in all required fields (Full Name, Phone Number, and Street Address).");
+                    return;
                 }
 
-                localStorage.removeItem('simply_cart');
-                document.getElementById('generated-order-id').textContent = `#${assignedOrderId}`;
-                document.getElementById('order-success-modal')?.classList.remove('hidden');
+                placeOrderBtn.disabled = true;
+                placeOrderBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Processing Order...`;
+
+                const orderPayload = {
+                    store_id: currentStoreId,
+                    customer_name: name,
+                    customer_phone: phone,
+                    customer_email: email || null,
+                    street_address: address,
+                    city: city,
+                    payment_method: paymentMethod,
+                    items: cart,
+                    total_amount: grandTotalLKR
+                };
+
+                try {
+                    const res = await fetch(`${SUPABASE_URL}/rest/v1/orders`, {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_KEY,
+                            'Authorization': `Bearer ${SUPABASE_KEY}`,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=representation'
+                        },
+                        body: JSON.stringify(orderPayload)
+                    });
+
+                    if (res.ok) {
+                        const insertedOrders = await res.json();
+                        const orderIdObj = Array.isArray(insertedOrders) ? insertedOrders[0] : insertedOrders;
+                        const shortId = orderIdObj?.id ? orderIdObj.id.slice(0, 5).toUpperCase() : Math.floor(10000 + Math.random() * 90000);
+                        const assignedOrderId = `ST-${shortId}`;
+
+                        localStorage.removeItem('simply_cart');
+                        document.getElementById('generated-order-id').textContent = `#${assignedOrderId}`;
+                        document.getElementById('order-success-modal')?.classList.remove('hidden');
+                    } else {
+                        const errorText = await res.text();
+                        console.error("Order creation failed:", errorText);
+                        alert("Failed to place order. Please try again or check your internet connection.");
+                    }
+                } catch (e) {
+                    console.error("Network error during order placement:", e);
+                    alert("Connection error! Could not submit order. Please try again.");
+                } finally {
+                    placeOrderBtn.disabled = false;
+                    placeOrderBtn.innerHTML = `<i class="fas fa-check-circle"></i> Place Order Now`;
+                }
             });
         });
     </script>

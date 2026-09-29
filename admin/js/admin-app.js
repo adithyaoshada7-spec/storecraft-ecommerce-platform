@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         let apiSuccess = false;
 
-        // 1. Fetch store and products directly from Supabase Cloud API
+        // 1. Fetch store, products, and orders directly from Supabase Cloud API
         try {
             const storeRes = await fetch(`${SUPABASE_URL}/rest/v1/stores?slug=eq.${encodeURIComponent(slug)}&select=*`, {
                 headers: {
@@ -71,6 +71,44 @@ document.addEventListener('DOMContentLoaded', async () => {
                             }));
                         }
                     }
+
+                    // Fetch orders filtering strictly by store_id
+                    if (currentStore && currentStore.id) {
+                        try {
+                            const orderRes = await fetch(`${SUPABASE_URL}/rest/v1/orders?store_id=eq.${currentStore.id}&select=*&order=created_at.desc`, {
+                                headers: {
+                                    'apikey': SUPABASE_KEY,
+                                    'Authorization': `Bearer ${SUPABASE_KEY}`
+                                }
+                            });
+
+                            if (orderRes.ok) {
+                                const supaOrders = await orderRes.json();
+                                if (Array.isArray(supaOrders)) {
+                                    orders = supaOrders.map(o => {
+                                        const savedStatus = localStorage.getItem(`order_status_${o.id}`);
+                                        return {
+                                            id: o.id.length > 10 ? `ST-${o.id.substring(0, 5).toUpperCase()}` : o.id,
+                                            rawId: o.id,
+                                            storeId: o.store_id,
+                                            date: o.created_at ? new Date(o.created_at).toLocaleString() : '',
+                                            customerName: o.customer_name || 'Customer',
+                                            phone: o.customer_phone || '',
+                                            email: o.customer_email || '',
+                                            address: o.street_address || '',
+                                            city: o.city || '',
+                                            items: o.items || [],
+                                            totalLKR: Number(o.total_amount || 0),
+                                            paymentMethod: o.payment_method || 'Cash on Delivery',
+                                            status: savedStatus || o.status || 'Pending'
+                                        };
+                                    });
+                                }
+                            }
+                        } catch (orderErr) {
+                            console.warn("Direct Supabase orders fetch warning:", orderErr);
+                        }
+                    }
                 }
             }
         } catch (supaErr) {
@@ -90,7 +128,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             } catch (e) {}
         }
 
-        // 2. LocalStorage Fallback if API fails or offline
+        // 3. LocalStorage Fallback if API fails or offline
         if (!apiSuccess || !products || products.length === 0) {
             if (typeof getAdminProducts === 'function') {
                 products = getAdminProducts();
@@ -126,6 +164,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Always sync back to localStorage for consistency
         saveLocalProducts(products);
+        saveLocalOrders(orders);
     }
 
     function saveLocalProducts(prods) {
@@ -396,6 +435,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const o = orders.find(item => item.id === orderId);
                 if (o) {
                     o.status = newStatus;
+                    if (o.rawId) {
+                        localStorage.setItem(`order_status_${o.rawId}`, newStatus);
+                    }
                     saveLocalOrders(orders);
 
                     try {
