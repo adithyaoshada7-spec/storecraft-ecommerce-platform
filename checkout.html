@@ -191,6 +191,12 @@
                     const storesData = await storeRes.json();
                     if (Array.isArray(storesData) && storesData.length > 0) {
                         currentStoreId = storesData[0].id;
+                        const subStatus = (storesData[0].subscription_status || 'active').toLowerCase().trim();
+                        if (subStatus !== 'active') {
+                            alert("This store is temporarily unavailable.");
+                            window.location.href = `store.html?shop=${shopSlug}`;
+                            return;
+                        }
                     }
                 }
             } catch (err) {

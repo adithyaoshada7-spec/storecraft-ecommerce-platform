@@ -202,6 +202,13 @@
                 return;
             }
 
+            // 4. CHECK SUBSCRIPTION STATUS: IF NOT ACTIVE, SHOW TEMPORARILY UNAVAILABLE SCREEN
+            const subStatus = (currentStore?.subscription_status || currentStore?.subscriptionStatus || 'active').toLowerCase().trim();
+            if (subStatus !== 'active') {
+                renderStoreInactive(shopSlug, currentStore?.name || currentStore?.storeName);
+                return;
+            }
+
             // Populate Store Branding DOM
             const storeName = currentStore?.name || currentStore?.storeName || shopSlug.toUpperCase();
             const storeTagline = currentStore?.tagline || 'Online Store';
@@ -483,6 +490,36 @@
                         </a>
                         <a href="index.html" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-3 rounded-xl text-xs transition border border-slate-700 flex items-center justify-center gap-2">
                             <i class="fas fa-home"></i> Back to Main Directory
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Store Temporarily Unavailable Error Renderer
+        function renderStoreInactive(slug, storeName) {
+            const displayName = storeName || slug.toUpperCase();
+            document.title = `${displayName} - Temporarily Unavailable | StoreCraft`;
+            document.body.className = "bg-slate-950 text-slate-100 flex items-center justify-center min-h-screen p-4 font-sans";
+            document.body.innerHTML = `
+                <div class="max-w-md w-full bg-slate-900 border border-amber-500/30 rounded-3xl p-8 text-center space-y-6 shadow-2xl">
+                    <div class="w-20 h-20 bg-amber-500/10 text-amber-400 rounded-full flex items-center justify-center text-4xl mx-auto border border-amber-500/20">
+                        <i class="fas fa-store-slash"></i>
+                    </div>
+                    <div class="space-y-3">
+                        <span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 font-black text-xs px-3.5 py-1 rounded-full uppercase tracking-wider">STORE TEMPORARILY UNAVAILABLE</span>
+                        <h1 class="text-2xl font-black text-white">${displayName}</h1>
+                        <p class="text-sm font-bold text-slate-200 leading-relaxed">
+                            This store is temporarily unavailable
+                        </p>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Please contact the store administration or try again later.
+                        </p>
+                    </div>
+
+                    <div class="pt-4 flex flex-col gap-3">
+                        <a href="index.html" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-3 rounded-xl text-xs transition border border-slate-700 flex items-center justify-center gap-2">
+                            <i class="fas fa-home"></i> Back to Platform Directory
                         </a>
                     </div>
                 </div>

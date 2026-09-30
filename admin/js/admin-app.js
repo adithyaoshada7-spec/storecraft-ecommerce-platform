@@ -213,6 +213,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         const viewStoreBtn = document.getElementById('btn-view-live-store');
         if (viewStoreBtn) viewStoreBtn.href = `../store.html?shop=${activeSlug}`;
 
+        // Check Subscription Status
+        const subStatus = (currentStore.subscription_status || currentStore.subscriptionStatus || 'active').toLowerCase().trim();
+        const statusBadge = document.getElementById('admin-store-status-badge');
+
+        if (subStatus !== 'active') {
+            if (statusBadge) {
+                statusBadge.className = 'flex items-center gap-2 bg-rose-50 text-rose-700 border border-rose-200 px-3 py-1.5 rounded-xl text-xs font-bold';
+                statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500"></span> Store Status: Suspended`;
+            }
+            renderSuspendedAdminOverlay(currentStore.name || activeSlug);
+            return;
+        } else {
+            if (statusBadge) {
+                statusBadge.className = 'flex items-center gap-2 bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-bold';
+                statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Store Status: Active`;
+            }
+            removeSuspendedAdminOverlay();
+        }
+
         renderDashboardStats();
         renderProductsTable();
         renderOrdersTable();
@@ -644,5 +663,47 @@ document.addEventListener('DOMContentLoaded', async () => {
             toast.classList.add('opacity-0', '-translate-y-2');
             setTimeout(() => toast.remove(), 300);
         }, 3000);
+    }
+
+    // Suspended Store Admin Overlay Renderer
+    function renderSuspendedAdminOverlay(storeName) {
+        let overlay = document.getElementById('suspended-admin-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'suspended-admin-overlay';
+            overlay.className = 'fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex items-center justify-center p-4 text-center';
+            document.body.appendChild(overlay);
+        }
+
+        overlay.innerHTML = `
+            <div class="max-w-md w-full bg-slate-900 border border-rose-500/40 rounded-3xl p-8 space-y-6 shadow-2xl text-white">
+                <div class="w-20 h-20 bg-rose-500/10 text-rose-500 rounded-full flex items-center justify-center text-4xl mx-auto border border-rose-500/30 animate-pulse">
+                    <i class="fas fa-ban"></i>
+                </div>
+                <div class="space-y-3">
+                    <span class="bg-rose-600/20 text-rose-400 border border-rose-500/30 font-black text-xs px-3.5 py-1 rounded-full uppercase tracking-wider">ACCOUNT SUSPENDED</span>
+                    <h2 class="text-2xl font-black text-white">${storeName || activeSlug.toUpperCase()}</h2>
+                    <div class="p-4 bg-rose-950/60 border border-rose-800/60 rounded-2xl">
+                        <p class="text-sm font-extrabold text-rose-300">
+                            Your store account is suspended. Please contact platform support
+                        </p>
+                    </div>
+                </div>
+
+                <div class="pt-2 flex flex-col gap-3">
+                    <button onclick="document.getElementById('login-modal').classList.remove('hidden')" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-extrabold py-3.5 rounded-xl text-xs transition shadow-lg shadow-rose-600/30 flex items-center justify-center gap-2">
+                        <i class="fas fa-exchange-alt"></i> Switch Store / Login
+                    </button>
+                </div>
+            </div>
+        `;
+        overlay.classList.remove('hidden');
+    }
+
+    function removeSuspendedAdminOverlay() {
+        const overlay = document.getElementById('suspended-admin-overlay');
+        if (overlay) {
+            overlay.classList.add('hidden');
+        }
     }
 });
